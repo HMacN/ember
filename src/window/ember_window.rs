@@ -1,7 +1,7 @@
 use std::time::Instant;
 use winit::application::ApplicationHandler;
 use winit::event::{StartCause, WindowEvent};
-use winit::event_loop::{ActiveEventLoop, EventLoop};
+use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
 use winit::window::{Window, WindowId};
 
 pub struct EmberWindow {
@@ -16,6 +16,7 @@ impl EmberWindow {
 
     pub fn run(self) -> () {
         let event_loop = EventLoop::new().unwrap();
+        event_loop.set_control_flow(ControlFlow::Poll);
         let mut state = WindowState::default();
         let _ = event_loop.run_app(&mut state);
     }
@@ -32,7 +33,9 @@ impl WindowState {
 
 impl ApplicationHandler for WindowState {
     fn new_events(&mut self, event_loop: &ActiveEventLoop, cause: StartCause) {
-        self.window = Some(event_loop.create_window(Window::default_attributes()).unwrap())
+        if self.window.is_none() {
+            self.window = Some(event_loop.create_window(Window::default_attributes()).unwrap())
+        }
     }
 
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
