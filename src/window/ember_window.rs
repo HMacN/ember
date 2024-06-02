@@ -1,54 +1,32 @@
-use std::time::Instant;
-use winit::application::ApplicationHandler;
-use winit::event::{StartCause, WindowEvent};
-use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
-use winit::window::{Window, WindowId};
+use std::thread;
+use winit::event_loop::{ControlFlow, EventLoop};
+use crate::window::winit_window_wrapper::WinItWindowWrapper;
 
 pub struct EmberWindow {
-
+    window: Option<WinItWindowWrapper>
 }
 
 impl EmberWindow {
 
     pub fn new() -> EmberWindow {
-        return EmberWindow {};
+        return EmberWindow {
+            window: None,
+        };
     }
 
-    pub fn run(self) -> () {
-        let event_loop = EventLoop::new().unwrap();
-        event_loop.set_control_flow(ControlFlow::Poll);
-        let mut state = WindowState::default();
-        let _ = event_loop.run_app(&mut state);
-    }
-}
-
-#[derive(Default)]
-struct WindowState {
-    window: Option<Window>
-}
-
-impl WindowState {
-
-}
-
-impl ApplicationHandler for WindowState {
-    fn new_events(&mut self, event_loop: &ActiveEventLoop, cause: StartCause) {
-        if self.window.is_none() {
-            self.window = Some(event_loop.create_window(Window::default_attributes()).unwrap())
-        }
+    // TODO:
+    // Move this (and all other code that causes EmberWindow to depend on WinIt) into a new class
+    // that isn't exposed to the user.
+    pub fn run(&mut self) -> () {
+        thread::spawn(|| {
+            let event_loop = EventLoop::new().unwrap();
+            event_loop.set_control_flow(ControlFlow::Poll);
+            let mut state = WinItWindowWrapper::new();
+            let _ = event_loop.run_app(&mut state);
+        });
     }
 
-    fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        self.new_events(event_loop, StartCause::ResumeTimeReached {start: Instant::now(), requested_resume: Instant::now() });
-    }
+    fn close(&mut self) {g
 
-    fn window_event(&mut self, event_loop: &ActiveEventLoop, window_id: WindowId, event: WindowEvent) {
-
-    }
-
-    fn about_to_wait(&mut self, event_loop: &ActiveEventLoop) {
-        if let Some(window) = self.window.as_ref() {
-            window.request_redraw();
-        }
     }
 }
