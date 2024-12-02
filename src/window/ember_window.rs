@@ -26,7 +26,7 @@ impl EmberWindow {
         });
     }
 
-    fn close(&mut self) {g
+    fn close(&mut self) {
 
     }
 }
