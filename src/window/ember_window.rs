@@ -1,9 +1,10 @@
 use std::thread;
+use std::thread::Thread;
 use winit::event_loop::{ControlFlow, EventLoop};
 use crate::window::winit_window_wrapper::WinItWindowWrapper;
 
 pub struct EmberWindow {
-    window: Option<WinItWindowWrapper>
+    window: Option<WinItWindowWrapper>,
 }
 
 impl EmberWindow {
@@ -26,7 +27,7 @@ impl EmberWindow {
         });
     }
 
-    fn close(&mut self) {g
+    fn close(&mut self) {
 
     }
 }
