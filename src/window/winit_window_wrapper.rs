@@ -9,7 +9,7 @@ pub struct WinItWindowWrapper {
 }
 
 impl WinItWindowWrapper {
-    pub fn new() -> WinItWindowWrapper {
+    fn new() -> WinItWindowWrapper {
         let new_window = WinItWindowWrapper {
             window: None,
         };
@@ -42,11 +42,9 @@ impl ApplicationHandler for WinItWindowWrapper {
     }
 }
 
-pub fn foo() -> impl Fn() {
-    || {
-        let event_loop = EventLoop::new().unwrap();
-        event_loop.set_control_flow(ControlFlow::Poll);
-        let mut state = WinItWindowWrapper::new();
-        let _ = event_loop.run_app(&mut state);
-    }
+pub fn create_window() {
+    let event_loop = EventLoop::new().unwrap();
+    event_loop.set_control_flow(ControlFlow::Poll);
+    let mut state = WinItWindowWrapper::new();
+    let _ = event_loop.run_app(&mut state);
 }
