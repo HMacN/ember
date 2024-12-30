@@ -1,6 +1,6 @@
 use winit::window::{Window, WindowId};
 use winit::application::ApplicationHandler;
-use winit::event_loop::ActiveEventLoop;
+use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
 use winit::event::{StartCause, WindowEvent};
 use std::time::Instant;
 
@@ -14,7 +14,7 @@ impl WinItWindowWrapper {
             window: None,
         };
 
-        return new_window;
+        new_window
     }
 }
 
@@ -39,5 +39,14 @@ impl ApplicationHandler for WinItWindowWrapper {
         if let Some(window) = self.window.as_ref() {
             window.request_redraw();
         }
+    }
+}
+
+pub fn foo() -> impl Fn() {
+    || {
+        let event_loop = EventLoop::new().unwrap();
+        event_loop.set_control_flow(ControlFlow::Poll);
+        let mut state = WinItWindowWrapper::new();
+        let _ = event_loop.run_app(&mut state);
     }
 }

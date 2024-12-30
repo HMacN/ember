@@ -6,5 +6,5 @@ fn main()
     the tests folder is to go here. */
 
     let mut test_window = EmberWindow::new();
-    test_window.run() ;
+    test_window.run();
 }
