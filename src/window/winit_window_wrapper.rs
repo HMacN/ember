@@ -4,6 +4,8 @@ use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
 use winit::event::{StartCause, WindowEvent};
 use std::time::Instant;
 
+
+// TODO: Switch over to using winit_modular (https://docs.rs/winit-modular/latest/winit_modular/index.html) to avoid hogging the main thread.
 pub struct WinItWindowWrapper {
     window: Option<Window>,
 }
